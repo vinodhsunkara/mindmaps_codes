@@ -1,15 +1,35 @@
-public class KthSmallestElementinaBST {
-	Integer r = null;
-	Integer idx = 0;
-	public int kthSmallest(TreeNode root, int k) {
-		idx = 0;
-		travel(root,k);
-		return r.intValue();
-	}
-	void travel(TreeNode root, int k) {
-		if(root==null && r!=null) return;
-		if(root.left!=null) travel(root.left,k);
-		if(++idx==k) r = root.val;
-		if(root.right!=null) travel(root.right,k);
-	}
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        int leftCount = count(root.left);
+        int rightCount = count(root.right);
+        if(leftCount+1 == k) {
+            return root.val;
+        } else if(k <= leftCount) {
+            return kthSmallest(root.left, k);
+        } else {
+            return kthSmallest(root.right, k- leftCount -1 );
+        }
+    }
+    public int count(TreeNode root) {
+        if(root == null) {
+            return 0;
+        }
+        int nodeCount = 1;
+        if(root.left!=null) {
+            nodeCount = nodeCount + count(root.left);
+        }
+        if(root.right!=null) {
+            nodeCount = nodeCount + count(root.right);
+        }
+        return nodeCount;
+    }
 }
